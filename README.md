@@ -29,6 +29,7 @@ Specific options:
     -h, --host=HOST                  The hostname or ip of the host graphite is running on
     -p, --port=PORT                  The port graphite is listening on
     -n, --namespace=NAMESPACE        The graphite metric path to store data in
+    -d, --date=NAMESPACE             the date to get data for in the format YYYY-MM-DD
 
 Common options:
         --help                       Show this message

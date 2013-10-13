@@ -11,7 +11,7 @@ require 'choice'
 require 'fitgem'
 require 'tzinfo'
 
-PROGRAM_VERSION = "0.1.2"
+PROGRAM_VERSION = "0.2.0"
 SLEEP_STATE_TYPES = ['deep', 'light', 'awake']
 # this is just to be compatible with jawbone data
 JAWBONE_SLEEP_STATES = { 'awake' => 1, 'light' => 2, 'deep' => 3 }
@@ -39,6 +39,12 @@ Choice.options do
     short '-n'
     long '--namespace=NAMESPACE'
     desc 'The graphite metric path to store data in'
+  end
+
+  option :date do
+    short '-d'
+    long '--date=NAMESPACE'
+    desc 'the date to get data for in the format YYYY-MM-DD'
   end
 
   separator ''
@@ -126,7 +132,11 @@ def extract_data(client, &block)
   user_info = client.user_info
   user_timezone_name = user_info['user']['timezone']
   user_timezone = offset = TZInfo::Timezone.get(user_timezone_name).current_period.utc_total_offset / (60*60)
-  today = Date.today
+  if Choice[:date]
+    today = date = Date.strptime(Choice[:date],"%Y-%m-%d")
+  else
+    today = Date.today
+  end
   all_sleep_data = client.sleep_on_date(today)['sleep']
   if all_sleep_data.nil?
     puts "API rate limit potentially exceeded."

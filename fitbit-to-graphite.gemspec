@@ -1,6 +1,6 @@
 Gem::Specification.new do |gem|
   gem.name          = 'fitbit-to-graphite'
-  gem.version       = '0.1.2'
+  gem.version       = '0.2.0'
   gem.authors       = ["Daniel Schauenberg"]
   gem.email         = 'd@unwiredcouch.com'
   gem.homepage      = 'https://github.com/mrtazz/fitbit-to-graphite'
