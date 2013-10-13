@@ -9,8 +9,9 @@ require 'yaml'
 
 require 'choice'
 require 'fitgem'
+require 'tzinfo'
 
-PROGRAM_VERSION = "0.1.1"
+PROGRAM_VERSION = "0.1.2"
 SLEEP_STATE_TYPES = ['deep', 'light', 'awake']
 # this is just to be compatible with jawbone data
 JAWBONE_SLEEP_STATES = { 'awake' => 1, 'light' => 2, 'deep' => 3 }
@@ -123,7 +124,8 @@ def extract_data(client, &block)
     return
   end
   user_info = client.user_info
-  user_timezone = user_info['user']['timezone']
+  user_timezone_name = user_info['user']['timezone']
+  user_timezone = offset = TZInfo::Timezone.get(user_timezone_name).current_period.utc_total_offset / (60*60)
   today = Date.today
   all_sleep_data = client.sleep_on_date(today)['sleep']
   if all_sleep_data.nil?
