@@ -1,3 +1,10 @@
+PATH
+  remote: .
+  specs:
+    fitbit-to-graphite (0.1.0)
+      choice
+      fitgem
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -10,5 +17,4 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  choice
-  fitgem
+  fitbit-to-graphite!

@@ -124,7 +124,6 @@ def extract_data(client, &block)
   end
   user_info = client.user_info
   user_timezone = user_info['user']['timezone']
-  puts "The user timezone is: #{user_timezone}"
   today = Date.today
   all_sleep_data = client.sleep_on_date(today)['sleep']
   if all_sleep_data.nil?
