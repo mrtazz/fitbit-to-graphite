@@ -1,6 +1,6 @@
 Gem::Specification.new do |gem|
   gem.name          = 'fitbit-to-graphite'
-  gem.version       = '0.1.0'
+  gem.version       = '0.1.1'
   gem.authors       = ["Daniel Schauenberg"]
   gem.email         = 'd@unwiredcouch.com'
   gem.homepage      = 'https://github.com/mrtazz/fitbit-to-graphite'
@@ -9,6 +9,7 @@ Gem::Specification.new do |gem|
   gem.license       = 'MIT'
 
   gem.files         = `git ls-files`.split($\)
+  gem.executables   << 'fitbit-to-graphite.rb'
   gem.name          = "fitbit-to-graphite"
 
   gem.add_runtime_dependency "fitgem"
