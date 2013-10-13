@@ -8,6 +8,17 @@ You can get the script from rubygems:
 
     gem install fitbit-to-graphite
 
+## Setup
+fitbit-to-graphite reads its config file at `~/.fitgem.yml` which at least
+needs the following settings:
+```
+---
+:oauth:
+  :consumer_key: thekey
+  :consumer_secret: thesecret
+```
+Fill in the key and secret from the app you created for it and on first run it
+should register the OAuth data.
 
 ## Usage
 ```
