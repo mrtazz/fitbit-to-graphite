@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    fitbit-to-graphite (0.1.1)
+    fitbit-to-graphite (0.2.0)
       choice
       fitgem
       tzinfo
@@ -9,13 +9,11 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    atomic (1.1.14)
     choice (0.1.6)
-    fitgem (0.8.0)
+    fitgem (0.9.0)
       oauth
     oauth (0.4.7)
-    thread_safe (0.1.3)
-      atomic
+    thread_safe (0.3.3)
     tzinfo (1.1.0)
       thread_safe (~> 0.1)
 

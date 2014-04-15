@@ -1,0 +1,14 @@
+language: ruby
+rvm:
+- 2.0.0
+- 1.9.3
+- jruby-19mode
+- rbx-2
+deploy:
+  provider: rubygems
+  api_key:
+    secure: IZ25Ko2l8PbTXgrHPCULNficgmPMqX0DvXmZdowypnyPfJGIPpPaPJYoT2FNXhTlgqZUtAb5gmWQcLDmxeMUd5zLB/R97/QL2sg1pcz7W6YnhKKVcjGIH1m0sHpB+IiNAtxQP1F256XVWdJIIDhvyMi4WIaN9YFFip2i4dTonVs=
+  gem: fitbit-to-graphite
+  on:
+    tags: true
+    repo: mrtazz/fitbit-to-graphite
