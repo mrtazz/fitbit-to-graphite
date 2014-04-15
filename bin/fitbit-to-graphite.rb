@@ -11,7 +11,7 @@ require 'choice'
 require 'fitgem'
 require 'tzinfo'
 
-PROGRAM_VERSION = "0.2.0"
+PROGRAM_VERSION = "0.2.1"
 SLEEP_STATE_TYPES = ['deep', 'light', 'awake']
 # this is just to be compatible with jawbone data
 JAWBONE_SLEEP_STATES = { 'awake' => 1, 'light' => 2, 'deep' => 3 }
