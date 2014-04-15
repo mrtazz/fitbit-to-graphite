@@ -150,6 +150,10 @@ def extract_data(client, &block)
       sleep_summary = potential_log
     end
   end
+  if sleep_data.length == 0
+    puts "No sleep data recorded for #{today}"
+    return
+  end
   createdate = DateTime.strptime("#{sleep_summary['startTime']}#{user_timezone}",'%Y-%m-%dT%H:%M:%S.%L%z').to_time.to_i
   msg = ""
   msg << "#{Choice[:namespace]}.summary.awakenings #{sleep_summary['awakeningsCount']} #{createdate}\n"
