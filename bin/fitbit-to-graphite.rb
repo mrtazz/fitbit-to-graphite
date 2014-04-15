@@ -43,7 +43,7 @@ Choice.options do
 
   option :date do
     short '-d'
-    long '--date=NAMESPACE'
+    long '--date=DATE'
     desc 'the date to get data for in the format YYYY-MM-DD'
   end
 
