@@ -46,6 +46,12 @@ Choice.options do
     long '--date=DATE'
     desc 'the date to get data for in the format YYYY-MM-DD'
   end
+  
+  option :period do
+    short '-p'
+    long '--period=PERIOD'
+    desc 'the date range period, one of 1d, 7d, 30d, 1w, 1m'
+  end
 
   separator ''
   separator 'Common options: '
@@ -65,6 +71,12 @@ Choice.options do
     end
   end
 
+  option :weight do
+	short '-w'
+    long '--weight'
+    desc 'retrieve weight instead of sleep (default is sleep)'
+  end
+  
   option :debug do
     long '--debug'
     desc 'run in debug mode'
@@ -124,11 +136,8 @@ def client_setup
   return client
 end
 
-def extract_data(client, &block)
-  if block.nil?
-    puts "No block given."
-    return
-  end
+def get_sleep_data(client)
+
   user_info = client.user_info
   user_timezone_name = user_info['user']['timezone']
   user_timezone = offset = TZInfo::Timezone.get(user_timezone_name).current_period.utc_total_offset / (60*60)
@@ -166,25 +175,69 @@ def extract_data(client, &block)
     value = Choice[:jawbone] == true ? JAWBONE_SLEEP_STATES[state_name] : data['value']
     msg << "#{Choice[:namespace]}.details.#{state_name} #{value} #{d.to_time.to_i}\n"
   end
-  yield msg
+  return msg
 end
 
-def send_to_graphite(client)
-  extract_data(client) do |msg|
-    socket = TCPSocket.open(Choice[:host], Choice[:port])
-    socket.write(msg)
+def get_weight_data(client)
+  user_info = client.user_info
+  user_timezone_name = user_info['user']['timezone']
+  user_timezone = offset = TZInfo::Timezone.get(user_timezone_name).current_period.utc_total_offset / (60*60)
+  if Choice[:date]
+    today = date = Date.strptime(Choice[:date],"%Y-%m-%d")
+  else
+    today = Date.today
   end
+  
+  if Choice[:period]
+	period = Choice[:period]
+  else
+    period = '1d'
+  end
+  
+  #all_sleep_data = client.sleep_on_date(today)['sleep']
+  all_weight_data = client.body_weight(base_date: today, period: period)
+
+  if all_weight_data.nil?
+    puts "API rate limit potentially exceeded."
+    return
+  end
+  
+  all_weight_data = all_weight_data['weight']
+  
+  if all_weight_data.length == 0
+    puts "No weight data recorded for #{today}"
+    return
+  end
+  
+  msg = ""
+  all_weight_data.each do |entry|
+    createdate = DateTime.strptime("#{entry['date']}T#{entry['time']}#{user_timezone}",'%Y-%m-%dT%H:%M:%S%z').to_time.to_i
+    msg << "#{Choice[:namespace]}.weight #{entry['weight']} #{createdate}\n"
+  end
+	
+  return msg
 end
 
-def print_sleep_data(client)
-  extract_data(client) {|msg| puts msg}
+def send_to_graphite(msg)
+  socket = TCPSocket.open(Choice[:host], Choice[:port])
+  socket.write(msg)
+end
+
+def print_data(msg)
+  puts msg
 end
 
 
 # main
 client = client_setup
-if Choice[:debug]
-  print_sleep_data(client)
+msg = ""
+if Choice[:weight]
+	msg = get_weight_data(client)
+  else
+	msg = get_sleep_data(client)
+  end
+if Choice[:debug] 
+  print_data(msg)
 else
-  send_to_graphite(client)
+  send_to_graphite(msg)
 end
